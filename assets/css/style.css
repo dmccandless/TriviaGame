@@ -1,0 +1,40 @@
+*{
+	box-sizing: border-box;
+}
+
+body{
+	width: 1024px;
+	background-image: url("../images/#.png");
+	font-size: 18px;
+	font-family: "Arial", "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.content-entire{
+	max-width: 960px;
+	width: 100%;
+	margin: 0 auto;
+	clear: both;
+}
+
+div{
+	margin: 10px 0;
+}
+
+p{
+	margin: 10px;
+}
+
+img{
+	width: 100px;
+	height: 100px;
+}
+
+
+#banner{
+	width: 30%;
+	color: white;
+	background-color: darkblue;
+	padding: 10px 0;
+	text-align: center;
+}
+
