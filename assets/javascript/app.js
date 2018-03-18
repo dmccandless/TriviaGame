@@ -13,23 +13,56 @@ $(document).ready(function(){
 //array of objects containing strings of answers to questions
 //marker on correct string in each answer object
 //each question string is placed in a <p> on each qAndA gameBoard
-//each answer string is placed on a button in each qAndA gameBoard 
+//each answer string is placed on a button in each qAndA gameBoard
 
-var questions = ["Which President was impeached?", 
+
+//put arrays together in an object
+
+var question01 = {
+	question: "Which of the following Presidents was impeached?",
+	answers: ["Lyndon Johnson", "Andrew Johnson", "Dwight Eisenhower", "Herbert Hoover"],
+	correctAnswer: "Andrew Johnson"
+}
+
+var question02 = {
+	question: "Which President was President for two non-consecutive terms?",
+	answers: ["Grover Cleveland", "James Monroe", "Woodrow Wilson", "Ulysses S. Grant"],
+	correctAnswer: "Grover Cleveland"
+}
+
+var question03 = {
+	question: "Which President was NOT a general before he was President?",
+	answers: ["Dwight Eisenhower", "George Washington", "Franklin D. Roosevelt", "Ulysses S. Grant"],
+	correctAnswer: "Franklin D. Roosevelt"
+}
+
+var question04 = {
+	question: "Which President was NOT from Virginia?",
+	answers: ["John Adams", "Thomas Jefferson", "James Madison", "Woodrow Wilson"],
+	correctAnswer: "John Adams"
+}
+
+var question05 = {
+	question: "Which President served the shortest span of time as President?",
+	answers: ["Zachary Taylor", "William Henry Harrison", "James A. Garfield", "William McKinley"],
+	correctAnswer: "William Henry Harrison"
+}
+
+/*var questions = ["Which President was impeached?", 
 				 "Which President was President for two non-consecutive terms?",
 				 "Which President was NOT a general before he was President?",
 				 "Which President was NOT from Virginia?",
 				 "Which President served the shortest amount of time as President?"];
 
-var answers = [{"Lyndon Johnson", "Andrew Johnson*", "Dwight Eisenhower", "Herbert Hoover"},
-			   {"Grover Cleveland*", "James Monroe", "Woodrow Wilson" "Ulysses S. Grant"},
-			   {"Dwight Eisenhower", "George Washington", "Franklin D. Roosevelt*", "Ulysses S. Grant"},
-			   {"John Adams*", "Thomas Jefferson", "James Madison", "Woodrow Wilson"},
-			   {"Zachary Taylor", "William Henry Harrison*", "James A. Garfield", "William McKinley"}];
+var answers = [["Lyndon Johnson", "Andrew Johnson*", "Dwight Eisenhower", "Herbert Hoover"],
+			   ["Grover Cleveland*", "James Monroe", "Woodrow Wilson" "Ulysses S. Grant"],
+			   ["Dwight Eisenhower", "George Washington", "Franklin D. Roosevelt*", "Ulysses S. Grant"],
+			   ["John Adams*", "Thomas Jefferson", "James Madison", "Woodrow Wilson"],
+			   ["Zachary Taylor", "William Henry Harrison*", "James A. Garfield", "William McKinley"]];*/
 
 var triviaGame = {
 
-	var pageTime = 20000;
+	pageTime: 20000,
 
 	initGame: function(){
 		//call assembleHelloBoard() to make opening gameBoard
