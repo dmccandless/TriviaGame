@@ -63,6 +63,7 @@ var questionArray = ["question01", "question02", "question03", "question04", "qu
 //questionArray[0].question
 //questionArray[0].answer[2]
 //questionArray[0].correctAnswer
+//questIndex = 0;
 
 /*
 var letters = [a, b, c];
@@ -112,41 +113,93 @@ var remarkArray = ["Yep, you got it right!", "Nope! But here's the correct answe
 
 var triviaGame = {
 
-	pageTime: 20000,
+	pageTimer: 20000, //event is initiated by start button or processSelections()
+	flipTimer: 3000, //event is initiated by processSelections()
 	correctAnswers: 0,
 	incorrectAnswers: 0,
 	outOfTimes: 0,
 
 	initGame: function(){
-		//call assembleHelloBoard() to make opening gameBoard
+		triviaGame.assembleHelloBoard();
 	}
 
 	timer: function(){
 		triviaGame.pageTime--;
 	}
 
-	/*assembleHelloBoard: function(){
-		//assemble opening gameBoard
-	}*/
+	assembleHelloBoard: function(){
+		var startBtn = $("<button>");
+		startBtn.text("START");
+	}
 
 	displayHelloBoard: function(){
-		//display opening gameBoard
-		//$("#startButton").click(function(){call first qAndA gameBoard, set page timer to 20000});
+		$("#viewScreen").append(startBtn);
 	}
+
+	startBtn.click(function(){
+		assembleQandA_Board(questIndex);
+		startPageTimer();
+		questIndex++;
+	});
+
+
+	firstPossAnsBtn.click(function(){
+		var btnAnsInput = $(this).attr("data-possAns");
+		processSelections(questionArray[0], btnAnsInput);
+	});
+
+	secondPossAnsBtn.click(function(){
+		var btnAnsInput = $(this).attr("data-possAns");
+		processSelections(questionArray[1], btnAnsInput);
+	});
+
+	thirdPossAnsBtn.click(function(){
+		var btnAnsInput = $(this).attr("data-possAns");
+		processSelections(questionArray[2], btnAnsInput);
+	});
+
+	fourthPossAnsBtn.click(function(){
+		var btnAnsInput = $(this).attr("data-possAns");
+		processSelections(questionArray[3], btnAnsInput);
+	});
 	//flip timer should be set to 3000
 
-	/*assembleQandA_Board: function(){
-		//
-	}*/
+	assembleQandA_Board: function(questIndex){
+		var questPara = $("<p>");
+		questPara.text(questionArray[questIndex].question);
+		var firstPossAnsBtn = $("<button>");
+		firstPossAnsBtn.addClass("possAns");
+		firstPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[0])
+		firstPossAnsBtn.text(questionArray[questIndex].answers[0]);
+		var secondPossAnsBtn = $("<button>");
+		secondPossAnsBtn.addClass("possAns");
+		secondPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[1])
+		secondPossAnsBtn.text(questionArray[questIndex].answers[1]);
+		var thirdPossAnsBtn = $("<button>");
+		thirdPossAnsBtn.addClass("possAns");
+		thirdPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[2])
+		thirdPossAnsBtn.text(questionArray[questIndex].answers[2]);
+		var fourthPossAnsBtn = $("<button>");
+		fourthPossAnsBtn.addClass("possAns");
+		fourthPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[3])
+		fourthPossAnsBtn.text(questionArray[questIndex].answers[3]);
+
+
+
+
+	}
 
 	displayQandA_Board: function(/*questionArray[i]*/){
 		$("#viewScreen").append(/*timer*/);//in a <p>
-		$("#viewScreen").append(questionArray[0].question);//in a <p>
-		$("#viewScreen").append(questionArray[0].answer[0]);//on a <button>
-		$("#viewScreen").append(questionArray[0].answer[1]);//on a <button>
-		$("#viewScreen").append(questionArray[0].answer[2]);//on a <button>
-		$("#viewScreen").append(questionArray[0].answer[3]);//on a <button>
-		//on any answer button click, call processSelections(question[i]) 
+		$("#viewScreen").append(questPara);
+		$("#viewScreen").append(firstPossAnsBtn);
+		$("#viewScreen").append(secondPossAnsBtn);
+		$("#viewScreen").append(thirdPossAnsBtn);
+		$("#viewScreen").append(fourthPossAnsBtn);
+		if (pageTimer === 0){
+			answerStatus = 2;
+			processSelections(questIndex, answerStatus);
+		}
 		//on expiration of page timer, call processSelections(question[i], answerInput)
 	}
 
@@ -156,57 +209,178 @@ var triviaGame = {
 
 	//timer event to move to another page if no answer
 
-	/*processSelections: function(question[i], answerInput){
-		//if(questionArray[0].correctAnswer === answerInput){
-		answerStatus = 1;
+	processSelections: function(question[i], answerInput){
+		//stop/clear/reset pageTimer
+		if(questionArray[i].correctAnswer === answerInput){
+		answerStatus = 0;
 		correctAnswers++;
 		}
-		else if(questionArray[0].correctAnswer !== answerInput){
-			answerStatus = -1;
+		else if(questionArray[i].correctAnswer !== answerInput){
+			answerStatus = 1;
 			incorrectAnswers++;
 		} else{
-			answerStatus = 0;
+			answerStatus = 2;
 			outOfTimes++;
 		}
-		call displayAnswerBoard(answerStatus);
-		set flip timer to 3000
-			when timer expires and answerGivenCounter === 5, call displayWrapUpBoard()
-			when timer expires and answerGivenCounter < 5, call displayQandABoard() with
-				questionArray[i + 1]
-	}*/
+		assembleAnswerBoard(answerStatus);
+	}
+
+	assembleAnswerBoard: function(questIndex, answerStatus){
+		var questPara = $("<p>");
+		questPara.text(questionArray[questIndex].question);
+		var remarkPara = $("<p>");
+		remarkArray.text(remarkArray[answerStatus]);
+		var corrAnsPara = $("<p>");
+		corrAnsPara.text(questionArray[questIndex].correctAnswer);
+		var corrAnsImg = $("<img>");
+		corrAnsImg.html(questionArray[questIndex].correctImg);
+		displayAnswerBoard(answerStatus);
+	}
 
 	displayAnswerBoard: function(answerStatus){
 		$("#viewScreen").append(/*pageTimer -- but stopped*/);
-		$("#viewScreen").append(questionArray[0].question);
-		$("#viewScreen").append(remarkArray[0]);
-		$("#viewScreen").append(questionArray[0].correctAnswer);
-		$("#viewScreen").append(questionArray[0].correctImg);
+		$("#viewScreen").append(questPara);
+		$("#viewScreen").append(remarkPara);
+		$("#viewScreen").append(corrAnsPara);
+		$("#viewScreen").append(corrAnsImg);
 
 	}
 
-	keepScore: function(){
-		//update counters
+	set flip timer to 3000
+			when timer expires and answerGivenCounter === 5, call displayWrapUpBoard()
+			when timer expires and answerGivenCounter < 5, call displayQandABoard() with
+				questionArray[i + 1]
+
+	assembleWrapUpBoard: function(){
+		var gameOverPara = $("<p>");
+		gameOverPara.text("Game's over.  Here's how you did.");
+		var winsPara = $("<p>");
+		winsPara.text("Wins: " + correctAnswers);
+		var lossesPara = $("<p>");
+		lossesPara.text("Losses: " + incorrectAnswers);
+		var outOfTimesPara = $("<p>");
+		outOfTimesPara.text("Unanswered: " + outOfTimes);
+		var startBtn = $("<button>");
+		startBtn.text("START OVER?");
+
 	}
-
-	/*assembleWrapUpBoard: function(){
-
-	}*/
 
 	displayWrapUpBoard: function(){
-
+		$("#viewScreen").append(gameOverPara);
+		$("#viewScreen").append(winsPara);
+		$("#viewScreen").append(lossesPara);
+		$("#viewScreen").append(outOfTimesPara);
+		$("#viewScreen").append(startBtn);
+		
 	}
 
 //displays cumulative wins and losses for player as of this end of game
 //after 2 second delay, starts a new game
 
-	wrapUpGame: function(){
+	/*wrapUpGame: function(){
 		$("#winsCounted").text("Wins: " + triviaGame.winsCounter);
 		$("#lossesCounted").text("Losses: " + triviaGame.lossesCounter);
-		setTimeout(triviaGame.resetInitValues, 2000);
-	}
+		$("")
+		//$("#startButton").click(function(){call first qAndA gameBoard, set page timer to 20000});
+	}*/
 
 }; 
 //end of triviaGame object
 
+//var timeCompute = {
+
+// This code will run as soon as the page loads
+window.onload = function() {
+  //$("#lap").on("click", stopwatch.recordLap);
+  $("#stop").on("click", stopwatch.stop);
+  $("#reset").on("click", stopwatch.reset);
+  $("#start").on("click", stopwatch.start);
+};
+
+//  Variable that will hold our setInterval that runs the stopwatch
+var intervalId;
+
+//prevents the clock from being sped up unnecessarily
+var clockRunning = false;
+
+// Our stopwatch object
+var stopwatch = {
+
+  time: 0,
+  //lap: 1,
+
+  reset: function() {
+
+    stopwatch.time = 0;
+    //stopwatch.lap = 1;
+
+    // DONE: Change the "display" div to "00:00."
+    $("#display").text("00:00");
+
+    // DONE: Empty the "laps" div.
+    //$("#laps").text("");
+  },
+  start: function() {
+
+    // DONE: Use setInterval to start the count here and set the clock to running.
+    if (!clockRunning) {
+        intervalId = setInterval(stopwatch.count, 20000);
+        clockRunning = true;
+    }
+  },
+  stop: function() {
+
+    // DONE: Use clearInterval to stop the count here and set the clock to not be running.
+    clearInterval(intervalId);
+    clockRunning = false;
+  },
+
+  /*
+  recordLap: function() {
+
+    // DONE: Get the current time, pass that into the stopwatch.timeConverter function,
+    //       and save the result in a variable.
+    var converted = stopwatch.timeConverter(stopwatch.time);
+
+    // DONE: Add the current lap and time to the "laps" div.
+    $("#laps").append("<p>Lap " + stopwatch.lap + " : " + converted + "</p>");
+
+    // DONE: Increment lap by 1. Remember, we can't use "this" here.
+    stopwatch.lap++;
+  },
+  */
+
+  count: function() {
+
+    // DONE: increment time by 1, remember we cant use "this" here.
+    stopwatch.time++;
+
+    // DONE: Get the current time, pass that into the stopwatch.timeConverter function,
+    //       and save the result in a variable.
+    var converted = stopwatch.timeConverter(stopwatch.time);
+    console.log(converted);
+
+    // DONE: Use the variable we just created to show the converted time in the "display" div.
+    $("#display").text(converted);
+  },
+  timeConverter: function(t) {
+
+    var minutes = Math.floor(t / 60);
+    var seconds = t - (minutes * 60);
+
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+
+    if (minutes === 0) {
+      minutes = "00";
+    }
+    else if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+
+    return minutes + ":" + seconds;
+  }
+}; //end of timeCompute object
 
 
