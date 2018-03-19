@@ -4,22 +4,6 @@ $(document).ready(function(){
 
 });
 
-//here's the game object
-//needed:
-//opening "gameBoard"
-//qAndA "gameBoards"
-//closing "gameBoard"
-//array of strings of questions
-//array of objects containing strings of answers to questions
-//marker on correct string in each answer object
-//each question string is placed in a <p> on each qAndA gameBoard
-//each answer string is placed on a button in each qAndA gameBoard
-//significant input validation issues that are not addressed here:
-//"very friendly user" assumption
-
-
-//put related arrays together in objects
-
 var question01 = {
 	question: "Which of the following Presidents was impeached?",
 	answers: ["Lyndon Johnson", "Andrew Johnson", "Dwight Eisenhower", "Herbert Hoover"],
@@ -55,116 +39,74 @@ var question05 = {
 	correctImg: "../images/harrisonWH.png"
 }
 
-//set up array of question objects
-
 var questionArray = ["question01", "question02", "question03", "question04", "question05"];
 
 
-//questionArray[0].question
-//questionArray[0].answer[2]
-//questionArray[0].correctAnswer
-//questIndex = 0;
-
-/*
-var letters = [a, b, c];
-
-for(var i = 0; i < letters.length; i++){
-	var letterBtn = $("<button>");
-	letterBtn.addClass("letter-button letter letter-button-color");
-	letterBtn.attr("data-letter", letters[i]);
-	letterBtn.text(letters[i]);
-	$("#buttons").append(letterBtn);
-}
-
-
-$(".letter-button").click(function(){
-	var fridgeMagnet = $("<div>");
-	fridgeMagnet.addClass("letter fridge-color");
-	fridgeMagnet.text($(this).attr("data-letter"));
-	console.log(fridgeMagnet);
-	$("#display").append(fridgeMagnet);
-});
-
-$("#clear").click(function(){
-	$("#display").empty();
-});
-
-//***************** some mock-ups
-
-$("#startButton").click(function(){
-	$("#viewScreen").empty();
-});
-*/
-
-/*var questions = ["Which President was impeached?", 
-				 "Which President was President for two non-consecutive terms?",
-				 "Which President was NOT a general before he was President?",
-				 "Which President was NOT from Virginia?",
-				 "Which President served the shortest amount of time as President?"];
-
-var answers = [["Lyndon Johnson", "Andrew Johnson*", "Dwight Eisenhower", "Herbert Hoover"],
-			   ["Grover Cleveland*", "James Monroe", "Woodrow Wilson" "Ulysses S. Grant"],
-			   ["Dwight Eisenhower", "George Washington", "Franklin D. Roosevelt*", "Ulysses S. Grant"],
-			   ["John Adams*", "Thomas Jefferson", "James Madison", "Woodrow Wilson"],
-			   ["Zachary Taylor", "William Henry Harrison*", "James A. Garfield", "William McKinley"]];*/
 
 var remarkArray = ["Yep, you got it right!", "Nope! But here's the correct answer....",
 					 "Time's up for this question, let's move to the next one."];
 
 var triviaGame = {
 
-	pageTimer: 20000, //event is initiated by start button or processSelections()
-	flipTimer: 3000, //event is initiated by processSelections()
+	pageTimer: 20000, //? is this really needed if I use setTimeouts of 20000 - seems necessary for display of time to user
 	correctAnswers: 0,
 	incorrectAnswers: 0,
 	outOfTimes: 0,
+	questIndex: 0,
+	answersGivenCounter: 0,
+
+	startBtn.click(function(){
+		assembleQandA_Board(questIndex);
+		setTimeout(processSelections, 20000);
+		questIndex++;
+	});
+
+	firstPossAnsBtn.click(function(){
+		clearTimeout();
+		var btnAnsInput = $(this).attr("data-possAns");
+		processSelections(questionArray[0], btnAnsInput);
+	});
+
+	secondPossAnsBtn.click(function(){
+		clearTimeout();
+		var btnAnsInput = $(this).attr("data-possAns");
+		processSelections(questionArray[1], btnAnsInput);
+	});
+
+	thirdPossAnsBtn.click(function(){
+		clearTimeout();
+		var btnAnsInput = $(this).attr("data-possAns");
+		processSelections(questionArray[2], btnAnsInput);
+	});
+
+	fourthPossAnsBtn.click(function(){
+		clearTimeout();
+		var btnAnsInput = $(this).attr("data-possAns");
+		processSelections(questionArray[3], btnAnsInput);
+	});
 
 	initGame: function(){
 		triviaGame.assembleHelloBoard();
 	}
 
-	timer: function(){
-		triviaGame.pageTime--;
+	resetPageTimer: function(){
+		pageTimer: 20000
 	}
 
 	assembleHelloBoard: function(){
 		var startBtn = $("<button>");
 		startBtn.text("START");
+		triviaGame.displayHelloBoard();
 	}
 
 	displayHelloBoard: function(){
 		$("#viewScreen").append(startBtn);
 	}
 
-	startBtn.click(function(){
-		assembleQandA_Board(questIndex);
-		startPageTimer();
-		questIndex++;
-	});
-
-
-	firstPossAnsBtn.click(function(){
-		var btnAnsInput = $(this).attr("data-possAns");
-		processSelections(questionArray[0], btnAnsInput);
-	});
-
-	secondPossAnsBtn.click(function(){
-		var btnAnsInput = $(this).attr("data-possAns");
-		processSelections(questionArray[1], btnAnsInput);
-	});
-
-	thirdPossAnsBtn.click(function(){
-		var btnAnsInput = $(this).attr("data-possAns");
-		processSelections(questionArray[2], btnAnsInput);
-	});
-
-	fourthPossAnsBtn.click(function(){
-		var btnAnsInput = $(this).attr("data-possAns");
-		processSelections(questionArray[3], btnAnsInput);
-	});
-	//flip timer should be set to 3000
-
 	assembleQandA_Board: function(questIndex){
+		resetPageTimer(); //?
+		var timerPara = $("<p>");
+		timerPara.text("Time remaining: " + pageTimer + "seconds");//will this be in milliseconds and going up not down?
 		var questPara = $("<p>");
 		questPara.text(questionArray[questIndex].question);
 		var firstPossAnsBtn = $("<button>");
@@ -184,33 +126,21 @@ var triviaGame = {
 		fourthPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[3])
 		fourthPossAnsBtn.text(questionArray[questIndex].answers[3]);
 
-
-
-
+		triviaGame.displayQandA_Board(questionArray[i]);
 	}
 
-	displayQandA_Board: function(/*questionArray[i]*/){
-		$("#viewScreen").append(/*timer*/);//in a <p>
+	displayQandA_Board: function(questionArray[i]){
+		$("#viewScreen").append(timerPara);
 		$("#viewScreen").append(questPara);
 		$("#viewScreen").append(firstPossAnsBtn);
 		$("#viewScreen").append(secondPossAnsBtn);
 		$("#viewScreen").append(thirdPossAnsBtn);
 		$("#viewScreen").append(fourthPossAnsBtn);
-		if (pageTimer === 0){
-			answerStatus = 2;
-			processSelections(questIndex, answerStatus);
-		}
-		//on expiration of page timer, call processSelections(question[i], answerInput)
 	}
 
-	//click button event for player to submit answer
-	//click button event to start game
-	//click button event to start another game
-
-	//timer event to move to another page if no answer
 
 	processSelections: function(question[i], answerInput){
-		//stop/clear/reset pageTimer
+		answersGivenCounter++;
 		if(questionArray[i].correctAnswer === answerInput){
 		answerStatus = 0;
 		correctAnswers++;
@@ -226,6 +156,8 @@ var triviaGame = {
 	}
 
 	assembleAnswerBoard: function(questIndex, answerStatus){
+		var timerPara = $("<p>");
+		timerPara.text("Time remaining: " + pageTimer + "seconds");//will this be in milliseconds and going up not down?
 		var questPara = $("<p>");
 		questPara.text(questionArray[questIndex].question);
 		var remarkPara = $("<p>");
@@ -238,18 +170,23 @@ var triviaGame = {
 	}
 
 	displayAnswerBoard: function(answerStatus){
-		$("#viewScreen").append(/*pageTimer -- but stopped*/);
+		$("#viewScreen").append(timerPara);//but this timerPara will be stopped
 		$("#viewScreen").append(questPara);
 		$("#viewScreen").append(remarkPara);
 		$("#viewScreen").append(corrAnsPara);
 		$("#viewScreen").append(corrAnsImg);
 
+		setTimeout(autoNewPage, 3000);		
 	}
 
-	set flip timer to 3000
-			when timer expires and answerGivenCounter === 5, call displayWrapUpBoard()
-			when timer expires and answerGivenCounter < 5, call displayQandABoard() with
-				questionArray[i + 1]
+	//helper function for automatically shifting to another page
+	autoNewPage: function(answersGivenCounter, questionArray[i]){
+		if(answersGivenCounter === 5){
+			assembleWrapUpBoard();
+		} else if(answersGivenCounter < 5){
+			assembleQandABoard(questionArray[i + 1]);
+		}
+	}				
 
 	assembleWrapUpBoard: function(){
 		var gameOverPara = $("<p>");
@@ -274,20 +211,17 @@ var triviaGame = {
 		
 	}
 
-//displays cumulative wins and losses for player as of this end of game
-//after 2 second delay, starts a new game
-
-	/*wrapUpGame: function(){
-		$("#winsCounted").text("Wins: " + triviaGame.winsCounter);
-		$("#lossesCounted").text("Losses: " + triviaGame.lossesCounter);
-		$("")
-		//$("#startButton").click(function(){call first qAndA gameBoard, set page timer to 20000});
-	}*/
-
-}; 
+};
 //end of triviaGame object
 
-//var timeCompute = {
+//significant input validation issues that are not addressed here:
+//"very friendly user" assumption
+
+
+
+//unclear if I will need the timer control help of something like timeCompute object
+/*
+var timeCompute = {
 
 // This code will run as soon as the page loads
 window.onload = function() {
@@ -317,8 +251,6 @@ var stopwatch = {
     // DONE: Change the "display" div to "00:00."
     $("#display").text("00:00");
 
-    // DONE: Empty the "laps" div.
-    //$("#laps").text("");
   },
   start: function() {
 
@@ -334,21 +266,6 @@ var stopwatch = {
     clearInterval(intervalId);
     clockRunning = false;
   },
-
-  /*
-  recordLap: function() {
-
-    // DONE: Get the current time, pass that into the stopwatch.timeConverter function,
-    //       and save the result in a variable.
-    var converted = stopwatch.timeConverter(stopwatch.time);
-
-    // DONE: Add the current lap and time to the "laps" div.
-    $("#laps").append("<p>Lap " + stopwatch.lap + " : " + converted + "</p>");
-
-    // DONE: Increment lap by 1. Remember, we can't use "this" here.
-    stopwatch.lap++;
-  },
-  */
 
   count: function() {
 
@@ -383,4 +300,37 @@ var stopwatch = {
   }
 }; //end of timeCompute object
 
+*/
+
+//**********************************************************************
+/*
+var letters = [a, b, c];
+
+for(var i = 0; i < letters.length; i++){
+	var letterBtn = $("<button>");
+	letterBtn.addClass("letter-button letter letter-button-color");
+	letterBtn.attr("data-letter", letters[i]);
+	letterBtn.text(letters[i]);
+	$("#buttons").append(letterBtn);
+}
+
+
+$(".letter-button").click(function(){
+	var fridgeMagnet = $("<div>");
+	fridgeMagnet.addClass("letter fridge-color");
+	fridgeMagnet.text($(this).attr("data-letter"));
+	console.log(fridgeMagnet);
+	$("#display").append(fridgeMagnet);
+});
+
+$("#clear").click(function(){
+	$("#display").empty();
+});
+
+//***************** some mock-ups
+
+$("#startButton").click(function(){
+	$("#viewScreen").empty();
+});
+*/
 
