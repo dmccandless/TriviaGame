@@ -46,6 +46,10 @@ var questionArray = ["question01", "question02", "question03", "question04", "qu
 var remarkArray = ["Yep, you got it right!", "Nope! But here's the correct answer....",
 					 "Time's up for this question, let's move to the next one."];
 
+//use triviaGame prefix on calls when necessary
+//remember to use val() when necessary
+
+
 var triviaGame = {
 
 	pageTimer: 20000, //? is this really needed if I use setTimeouts of 20000 - seems necessary for display of time to user
@@ -216,6 +220,28 @@ var triviaGame = {
 
 //significant input validation issues that are not addressed here:
 //"very friendly user" assumption
+
+//from Bootcamp video:
+
+var game = {
+	......
+	counter: 20,
+	........
+	countdown: function(){
+		game.counter--;
+		$("#counter").html(game.counter);
+		if(game.counter <= 0){
+			game.timeUp();
+		}
+	},
+	loadQuestion: function{
+		timer = setInterval(game.countdown, 1000);
+		$("#subWrapper").html("<h2>Time Remaining <span id='counter'>20 </span>Seconds</h2>");
+	}
+
+
+}
+
 
 
 
