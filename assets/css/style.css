@@ -7,13 +7,31 @@ body{
 	background-image: url("../images/#.png");
 	font-size: 18px;
 	font-family: "Arial", "Helvetica Neue", Helvetica, sans-serif;
+	line-height: 22px;
 }
 
-.content-entire{
+h1{
+	font-size: 30px;
+}
+
+h2{
+	font-size: 28px;
+}
+
+h3{
+	font-size: 26px;
+}
+
+ul{
+	display: inline;
+}
+
+.container{
 	max-width: 960px;
 	width: 100%;
 	margin: 0 auto;
 	clear: both;
+	text-align: center;
 }
 
 div{
@@ -29,12 +47,20 @@ img{
 	height: 255px;
 }
 
+footer .container{
+	padding: 4px 0;
+	background-color: #eeeeee;
+}
+
 
 #banner{
-	width: 30%;
 	color: white;
 	background-color: darkblue;
-	padding: 10px 0;
-	text-align: center;
+	padding: 20px 0;
+}
+
+#gameDashboard{
+	padding: 30px 0;
+	background-color: lightseagreen;
 }
 

@@ -1,8 +1,24 @@
-$(document).ready(function(){
-
-	triviaGame.initGame();
-
+$("#startButton").click(function(){
+	triviaGame.startBtn();
 });
+
+$("#answer01Btn").click(function(){
+	triviaGame.firstPossAnsBtn();
+});
+
+$("#answer02Btn").click(function(){
+	triviaGame.secondPossAnsBtn();
+});
+
+$("#answer03Btn").click(function(){
+	triviaGame.thirdPossAnsBtn();
+});
+
+$("#answer04Btn").click(function(){
+	triviaGame.fourthPossAnsBtn();
+});
+
+
 
 var question01 = {
 	question: "Which of the following Presidents was impeached?",
@@ -49,6 +65,11 @@ var remarkArray = ["Yep, you got it right!", "Nope! But here's the correct answe
 //use triviaGame prefix on calls when necessary
 //remember to use val() when necessary
 
+	
+
+
+
+
 
 var triviaGame = {
 
@@ -59,53 +80,48 @@ var triviaGame = {
 	questIndex: 0,
 	answersGivenCounter: 0,
 
-	startBtn.click(function(){
+
+	startBtn: function(){
 		assembleQandA_Board(questIndex);
 		setTimeout(processSelections, 20000);
 		questIndex++;
-	});
+	},
 
-	firstPossAnsBtn.click(function(){
+	firstPossAnsBtn: function(){
 		clearTimeout();
 		var btnAnsInput = $(this).attr("data-possAns");
 		processSelections(questionArray[0], btnAnsInput);
-	});
+	},
 
-	secondPossAnsBtn.click(function(){
+	secondPossAnsBtn: function(){
 		clearTimeout();
 		var btnAnsInput = $(this).attr("data-possAns");
 		processSelections(questionArray[1], btnAnsInput);
-	});
+	},
 
-	thirdPossAnsBtn.click(function(){
+	thirdPossAnsBtn: function(){
 		clearTimeout();
 		var btnAnsInput = $(this).attr("data-possAns");
 		processSelections(questionArray[2], btnAnsInput);
-	});
+	},
 
-	fourthPossAnsBtn.click(function(){
+	fourthPossAnsBtn: function(){
 		clearTimeout();
 		var btnAnsInput = $(this).attr("data-possAns");
 		processSelections(questionArray[3], btnAnsInput);
-	});
+	},
 
 	initGame: function(){
-		triviaGame.assembleHelloBoard();
-	}
+		triviaGame.displayHelloScreen();
+	},
 
 	resetPageTimer: function(){
 		pageTimer: 20000
-	}
+	},
 
-	assembleHelloBoard: function(){
-		var startBtn = $("<button>");
-		startBtn.text("START");
-		triviaGame.displayHelloBoard();
-	}
-
-	displayHelloBoard: function(){
-		$("#viewScreen").append(startBtn);
-	}
+	displayHelloScreen: function(){
+		$("#viewHelloScreen").css("display", "block");
+	},
 
 	assembleQandA_Board: function(questIndex){
 		resetPageTimer(); //?
@@ -130,26 +146,27 @@ var triviaGame = {
 		fourthPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[3])
 		fourthPossAnsBtn.text(questionArray[questIndex].answers[3]);
 
-		triviaGame.displayQandA_Board(questionArray[i]);
-	}
+		triviaGame.displayQandA_Board();
+	},
 
-	displayQandA_Board: function(questionArray[i]){
+	displayQandA_Board: function(){
+		$("#viewScreen").empty();
 		$("#viewScreen").append(timerPara);
 		$("#viewScreen").append(questPara);
 		$("#viewScreen").append(firstPossAnsBtn);
 		$("#viewScreen").append(secondPossAnsBtn);
 		$("#viewScreen").append(thirdPossAnsBtn);
 		$("#viewScreen").append(fourthPossAnsBtn);
-	}
+	},
 
 
-	processSelections: function(question[i], answerInput){
+	processSelections: function(questIndex, answerInput){
 		answersGivenCounter++;
-		if(questionArray[i].correctAnswer === answerInput){
+		if(questionArray[questIndex].correctAnswer === answerInput){
 		answerStatus = 0;
 		correctAnswers++;
 		}
-		else if(questionArray[i].correctAnswer !== answerInput){
+		else if(questionArray[questIndex].correctAnswer !== answerInput){
 			answerStatus = 1;
 			incorrectAnswers++;
 		} else{
@@ -157,7 +174,7 @@ var triviaGame = {
 			outOfTimes++;
 		}
 		assembleAnswerBoard(answerStatus);
-	}
+	},
 
 	assembleAnswerBoard: function(questIndex, answerStatus){
 		var timerPara = $("<p>");
@@ -171,9 +188,10 @@ var triviaGame = {
 		var corrAnsImg = $("<img>");
 		corrAnsImg.html(questionArray[questIndex].correctImg);
 		displayAnswerBoard(answerStatus);
-	}
+	},
 
 	displayAnswerBoard: function(answerStatus){
+		$("#viewScreen").empty();
 		$("#viewScreen").append(timerPara);//but this timerPara will be stopped
 		$("#viewScreen").append(questPara);
 		$("#viewScreen").append(remarkPara);
@@ -181,16 +199,16 @@ var triviaGame = {
 		$("#viewScreen").append(corrAnsImg);
 
 		setTimeout(autoNewPage, 3000);		
-	}
+	},
 
 	//helper function for automatically shifting to another page
-	autoNewPage: function(answersGivenCounter, questionArray[i]){
+	autoNewPage: function(answersGivenCounter, questIndex){
 		if(answersGivenCounter === 5){
 			assembleWrapUpBoard();
 		} else if(answersGivenCounter < 5){
-			assembleQandABoard(questionArray[i + 1]);
+			assembleQandABoard(questionArray[questIndex + 1]);
 		}
-	}				
+	},				
 
 	assembleWrapUpBoard: function(){
 		var gameOverPara = $("<p>");
@@ -204,9 +222,10 @@ var triviaGame = {
 		var startBtn = $("<button>");
 		startBtn.text("START OVER?");
 
-	}
+	},
 
 	displayWrapUpBoard: function(){
+		$("#viewScreen").empty();
 		$("#viewScreen").append(gameOverPara);
 		$("#viewScreen").append(winsPara);
 		$("#viewScreen").append(lossesPara);
@@ -216,12 +235,18 @@ var triviaGame = {
 	}
 
 };
+
+$(document).ready(function(){
+
+	triviaGame.initGame();
+
+});
 //end of triviaGame object
 
 //significant input validation issues that are not addressed here:
 //"very friendly user" assumption
 
-//from Bootcamp video:
+/*from Bootcamp video:
 
 var game = {
 	......
@@ -241,6 +266,7 @@ var game = {
 
 
 }
+*/
 
 
 
