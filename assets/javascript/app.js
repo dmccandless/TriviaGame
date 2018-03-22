@@ -3,59 +3,56 @@ $("#startButton").click(function(){
 });
 
 $("#answer01Btn").click(function(){
-	triviaGame.firstPossAnsBtn();
+	triviaGame.firstPossAnsBtnPressed();
 });
 
 $("#answer02Btn").click(function(){
-	triviaGame.secondPossAnsBtn();
+	triviaGame.secondPossAnsBtnPressed();
 });
 
 $("#answer03Btn").click(function(){
-	triviaGame.thirdPossAnsBtn();
+	triviaGame.thirdPossAnsBtnPressed();
 });
 
 $("#answer04Btn").click(function(){
-	triviaGame.fourthPossAnsBtn();
+	triviaGame.fourthPossAnsBtnPressed();
 });
 
 
 
-var question01 = {
-	question: "Which of the following Presidents was impeached?",
-	answers: ["Lyndon Johnson", "Andrew Johnson", "Dwight Eisenhower", "Herbert Hoover"],
-	correctAnswer: "Andrew Johnson",
-	correctImg: "../images/johnsonA.png"
-}
 
-var question02 = {
-	question: "Which President was President for two non-consecutive terms?",
-	answers: ["Grover Cleveland", "James Monroe", "Woodrow Wilson", "Ulysses S. Grant"],
-	correctAnswer: "Grover Cleveland",
-	correctImg: "../images/cleveland.png"
-}
 
-var question03 = {
-	question: "Which President was NOT a general before he was President?",
-	answers: ["Dwight Eisenhower", "George Washington", "Franklin D. Roosevelt", "Ulysses S. Grant"],
-	correctAnswer: "Franklin D. Roosevelt",
-	correctImg: "../images/rooseveltFD.png"
-}
 
-var question04 = {
-	question: "Which President was NOT from Virginia?",
-	answers: ["John Adams", "Thomas Jefferson", "James Madison", "Woodrow Wilson"],
-	correctAnswer: "John Adams",
-	correctImg: "../images/adamsJ.png"
-}
 
-var question05 = {
-	question: "Which President served the shortest span of time as President?",
-	answers: ["Zachary Taylor", "William Henry Harrison", "James A. Garfield", "William McKinley"],
-	correctAnswer: "William Henry Harrison",
-	correctImg: "../images/harrisonWH.png"
-}
 
-var questionArray = ["question01", "question02", "question03", "question04", "question05"];
+
+var questionArray = [
+
+	{	question: "Which of the following Presidents was impeached?",
+		answers: ["Lyndon Johnson", "Andrew Johnson", "Dwight Eisenhower", "Herbert Hoover"],
+		correctAnswer: "Andrew Johnson",
+		correctImg: "../images/johnsonA.png" },
+
+	{	question: "Which President was President for two non-consecutive terms?",
+		answers: ["Grover Cleveland", "James Monroe", "Woodrow Wilson", "Ulysses S. Grant"],
+		correctAnswer: "Grover Cleveland",
+		correctImg: "../images/cleveland.png" },
+
+	{	question: "Which President was NOT a general before he was President?",
+		answers: ["Dwight Eisenhower", "George Washington", "Franklin D. Roosevelt", "Ulysses S. Grant"],
+		correctAnswer: "Franklin D. Roosevelt",
+		correctImg: "../images/rooseveltFD.png" },
+
+	{	question: "Which President was NOT from Virginia?",
+		answers: ["John Adams", "Thomas Jefferson", "James Madison", "Woodrow Wilson"],
+		correctAnswer: "John Adams",
+		correctImg: "../images/adamsJ.png" },
+
+	{	question: "Which President served the shortest span of time as President?",
+		answers: ["Zachary Taylor", "William Henry Harrison", "James A. Garfield", "William McKinley"],
+		correctAnswer: "William Henry Harrison",
+		correctImg: "../images/harrisonWH.png" }
+];
 
 
 
@@ -82,33 +79,34 @@ var triviaGame = {
 
 
 	startBtn: function(){
-		assembleQandA_Board(questIndex);
-		setTimeout(processSelections, 20000);
-		questIndex++;
+		triviaGame.assembleQandA_Board(triviaGame.questIndex);
+		//setTimeout(processSelections, 20000);
+		//triviaGame.displayQuestAnsScreen(triviaGame.questIndex);
+		//triviaGame.questIndex++;
 	},
 
-	firstPossAnsBtn: function(){
-		clearTimeout();
+	firstPossAnsBtnPressed: function(){
+		clearTimeout();	
 		var btnAnsInput = $(this).attr("data-possAns");
-		processSelections(questionArray[0], btnAnsInput);
+		triviaGame.processSelections(questionArray[0], btnAnsInput);
 	},
 
-	secondPossAnsBtn: function(){
+	secondPossAnsBtnPressed: function(){
 		clearTimeout();
 		var btnAnsInput = $(this).attr("data-possAns");
-		processSelections(questionArray[1], btnAnsInput);
+		triviaGame.processSelections(questionArray[1], btnAnsInput);
 	},
 
-	thirdPossAnsBtn: function(){
+	thirdPossAnsBtnPressed: function(){
 		clearTimeout();
 		var btnAnsInput = $(this).attr("data-possAns");
-		processSelections(questionArray[2], btnAnsInput);
+		triviaGame.processSelections(questionArray[2], btnAnsInput);
 	},
 
-	fourthPossAnsBtn: function(){
-		clearTimeout();
+	fourthPossAnsBtnPressed: function(){
+		clearTimeout();	
 		var btnAnsInput = $(this).attr("data-possAns");
-		processSelections(questionArray[3], btnAnsInput);
+		triviaGame.processSelections(questionArray[3], btnAnsInput);
 	},
 
 	initGame: function(){
@@ -123,65 +121,69 @@ var triviaGame = {
 		$("#viewHelloScreen").css("display", "block");
 	},
 
-	assembleQandA_Board: function(questIndex){
-		resetPageTimer(); //?
-		var timerPara = $("<p>");
-		timerPara.text("Time remaining: " + pageTimer + "seconds");//will this be in milliseconds and going up not down?
-		var questPara = $("<p>");
-		questPara.text(questionArray[questIndex].question);
-		var firstPossAnsBtn = $("<button>");
-		firstPossAnsBtn.addClass("possAns");
-		firstPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[0])
-		firstPossAnsBtn.text(questionArray[questIndex].answers[0]);
-		var secondPossAnsBtn = $("<button>");
-		secondPossAnsBtn.addClass("possAns");
-		secondPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[1])
-		secondPossAnsBtn.text(questionArray[questIndex].answers[1]);
-		var thirdPossAnsBtn = $("<button>");
-		thirdPossAnsBtn.addClass("possAns");
-		thirdPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[2])
-		thirdPossAnsBtn.text(questionArray[questIndex].answers[2]);
-		var fourthPossAnsBtn = $("<button>");
-		fourthPossAnsBtn.addClass("possAns");
-		fourthPossAnsBtn.attr("data-possAns", questionArray[questIndex].answers[3])
-		fourthPossAnsBtn.text(questionArray[questIndex].answers[3]);
-
-		triviaGame.displayQandA_Board();
+	displayQuestAnsScreen: function(){
+		$("#viewHelloScreen").css("display", "none");
+		$("#viewQuestAnsScreen").css("display", "block");
 	},
 
-	displayQandA_Board: function(){
-		$("#viewScreen").empty();
-		$("#viewScreen").append(timerPara);
-		$("#viewScreen").append(questPara);
-		$("#viewScreen").append(firstPossAnsBtn);
-		$("#viewScreen").append(secondPossAnsBtn);
-		$("#viewScreen").append(thirdPossAnsBtn);
-		$("#viewScreen").append(fourthPossAnsBtn);
+	displayAnsScreen: function(){
+		$("#viewQuestAnsScreen").css("display", "none");
+		$("#viewAnsScreen").css("display", "block");
+	},
+
+	displayClosingScreen: function(){
+		$("#viewAnsScreen").css("display", "none");
+		$("#viewClosingScreen").css("display", "block");
+	},
+
+	displayHelloAgainScreen: function(){
+		$("#viewClosingScreen").css("display", "none");
+		$("#viewHelloScreen").css("display", "block");
+	},
+
+
+	assembleQandA_Board: function(questIndex){
+		//$("#viewQuestAnsScreen").empty();
+		$("#timerDisplay").text("20 seconds");
+		$("#questionDisplay").text(questionArray[triviaGame.questIndex].question);
+		console.log(questionArray[triviaGame.questIndex]);
+		$("#answer01Btn").addClass("possAns");
+		$("#answer01Btn").attr("data-possAns", questionArray[triviaGame.questIndex].answers[0]);
+		$("#answer01Btn").text(questionArray[triviaGame.questIndex].answers[0]);
+		$("#answer02Btn").addClass("possAns");
+		$("#answer02Btn").attr("data-possAns", questionArray[triviaGame.questIndex].answers[1]);
+		$("#answer02Btn").text(questionArray[questIndex].answers[1]);
+		$("#answer03Btn").addClass("possAns");
+		$("#answer03Btn").attr("data-possAns", questionArray[triviaGame.questIndex].answers[2]);
+		$("#answer03Btn").text(questionArray[questIndex].answers[2]);
+		$("#answer04Btn").addClass("possAns");
+		$("#answer04Btn").attr("data-possAns", questionArray[triviaGame.questIndex].answers[3]);
+		$("#answer04Btn").text(questionArray[questIndex].answers[3]);
+
+		triviaGame.displayQuestAnsScreen();
 	},
 
 
 	processSelections: function(questIndex, answerInput){
-		answersGivenCounter++;
-		if(questionArray[questIndex].correctAnswer === answerInput){
-		answerStatus = 0;
-		correctAnswers++;
+		triviaGame.answersGivenCounter++;
+		if(questionArray[triviaGame.questIndex].correctAnswer === answerInput){
+		triviaGame.answerStatus = 0;
+		triviaGame.correctAnswers++;
 		}
-		else if(questionArray[questIndex].correctAnswer !== answerInput){
-			answerStatus = 1;
-			incorrectAnswers++;
+		else if(questionArray[triviaGame.questIndex].correctAnswer !== answerInput){
+			triviaGame.answerStatus = 1;
+			triviaGame.incorrectAnswers++;
 		} else{
-			answerStatus = 2;
-			outOfTimes++;
+			triviaGame.answerStatus = 2;
+			triviaGame.outOfTimes++;
 		}
-		assembleAnswerBoard(answerStatus);
+		triviaGame.assembleAnswerBoard(triviaGame.answerStatus);
 	},
 
 	assembleAnswerBoard: function(questIndex, answerStatus){
-		var timerPara = $("<p>");
-		timerPara.text("Time remaining: " + pageTimer + "seconds");//will this be in milliseconds and going up not down?
-		var questPara = $("<p>");
-		questPara.text(questionArray[questIndex].question);
-		var remarkPara = $("<p>");
+		$("#timerDisplay").text("20 seconds");
+		$("#questionDisplay").text(questionArray[triviaGame.questIndex].question);
+		
 		remarkArray.text(remarkArray[answerStatus]);
 		var corrAnsPara = $("<p>");
 		corrAnsPara.text(questionArray[questIndex].correctAnswer);
@@ -190,16 +192,10 @@ var triviaGame = {
 		displayAnswerBoard(answerStatus);
 	},
 
-	displayAnswerBoard: function(answerStatus){
-		$("#viewScreen").empty();
-		$("#viewScreen").append(timerPara);//but this timerPara will be stopped
-		$("#viewScreen").append(questPara);
-		$("#viewScreen").append(remarkPara);
-		$("#viewScreen").append(corrAnsPara);
-		$("#viewScreen").append(corrAnsImg);
+	
 
-		setTimeout(autoNewPage, 3000);		
-	},
+	//setTimeout(autoNewPage, 3000);		
+	
 
 	//helper function for automatically shifting to another page
 	autoNewPage: function(answersGivenCounter, questIndex){
@@ -223,16 +219,6 @@ var triviaGame = {
 		startBtn.text("START OVER?");
 
 	},
-
-	displayWrapUpBoard: function(){
-		$("#viewScreen").empty();
-		$("#viewScreen").append(gameOverPara);
-		$("#viewScreen").append(winsPara);
-		$("#viewScreen").append(lossesPara);
-		$("#viewScreen").append(outOfTimesPara);
-		$("#viewScreen").append(startBtn);
-		
-	}
 
 };
 

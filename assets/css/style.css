@@ -64,3 +64,20 @@ footer .container{
 	background-color: lightseagreen;
 }
 
+#viewHelloScreen{
+	display: none;
+	}
+
+#viewQuestAnsScreen{
+	display: none;
+}
+
+#viewAnsScreen{
+	display: none;
+}
+
+#viewClosingScreen{
+	display: none;
+}
+
+
