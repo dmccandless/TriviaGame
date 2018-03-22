@@ -31,27 +31,32 @@ var questionArray = [
 	{	question: "Which of the following Presidents was impeached?",
 		answers: ["Lyndon Johnson", "Andrew Johnson", "Dwight Eisenhower", "Herbert Hoover"],
 		correctAnswer: "Andrew Johnson",
-		correctImg: "../images/johnsonA.png" },
+		correctImg: "assets/images/johnsonA.png",
+		correctImgDescrip: "Picture of President Andrew Johnson"},
 
 	{	question: "Which President was President for two non-consecutive terms?",
 		answers: ["Grover Cleveland", "James Monroe", "Woodrow Wilson", "Ulysses S. Grant"],
 		correctAnswer: "Grover Cleveland",
-		correctImg: "../images/cleveland.png" },
+		correctImg: "assets/images/clevelandG.png",
+		correctImgDescrip: "Picture of President Grover Cleveland"},
 
 	{	question: "Which President was NOT a general before he was President?",
 		answers: ["Dwight Eisenhower", "George Washington", "Franklin D. Roosevelt", "Ulysses S. Grant"],
 		correctAnswer: "Franklin D. Roosevelt",
-		correctImg: "../images/rooseveltFD.png" },
+		correctImg: "assets/images/rooseveltFD.png", 
+		correctImgDescrip: "Picture of President Franklin D. Roosevelt"},
 
 	{	question: "Which President was NOT from Virginia?",
 		answers: ["John Adams", "Thomas Jefferson", "James Madison", "Woodrow Wilson"],
 		correctAnswer: "John Adams",
-		correctImg: "../images/adamsJ.png" },
+		correctImg: "assets/images/adamsJ.png", 
+		correctImgDescrip: "Picture of President John Adams"},
 
 	{	question: "Which President served the shortest span of time as President?",
 		answers: ["Zachary Taylor", "William Henry Harrison", "James A. Garfield", "William McKinley"],
 		correctAnswer: "William Henry Harrison",
-		correctImg: "../images/harrisonWH.png" }
+		correctImg: "assets/images/harrisonWH.png", 
+		correctImgDescrip: "Picture of President William Henry Harrison"}
 ];
 
 
@@ -129,6 +134,7 @@ var triviaGame = {
 	displayAnsScreen: function(){
 		$("#viewQuestAnsScreen").css("display", "none");
 		$("#viewAnsScreen").css("display", "block");
+		setTimeout(triviaGame.autoNewPage, 3000);
 	},
 
 	displayClosingScreen: function(){
@@ -152,13 +158,13 @@ var triviaGame = {
 		$("#answer01Btn").text(questionArray[triviaGame.questIndex].answers[0]);
 		$("#answer02Btn").addClass("possAns");
 		$("#answer02Btn").attr("data-possAns", questionArray[triviaGame.questIndex].answers[1]);
-		$("#answer02Btn").text(questionArray[questIndex].answers[1]);
+		$("#answer02Btn").text(questionArray[triviaGame.questIndex].answers[1]);
 		$("#answer03Btn").addClass("possAns");
 		$("#answer03Btn").attr("data-possAns", questionArray[triviaGame.questIndex].answers[2]);
-		$("#answer03Btn").text(questionArray[questIndex].answers[2]);
+		$("#answer03Btn").text(questionArray[triviaGame.questIndex].answers[2]);
 		$("#answer04Btn").addClass("possAns");
 		$("#answer04Btn").attr("data-possAns", questionArray[triviaGame.questIndex].answers[3]);
-		$("#answer04Btn").text(questionArray[questIndex].answers[3]);
+		$("#answer04Btn").text(questionArray[triviaGame.questIndex].answers[3]);
 
 		triviaGame.displayQuestAnsScreen();
 	},
@@ -183,26 +189,28 @@ var triviaGame = {
 	assembleAnswerBoard: function(questIndex, answerStatus){
 		$("#timerDisplay").text("20 seconds");
 		$("#questionDisplay").text(questionArray[triviaGame.questIndex].question);
-		
-		remarkArray.text(remarkArray[answerStatus]);
-		var corrAnsPara = $("<p>");
-		corrAnsPara.text(questionArray[questIndex].correctAnswer);
-		var corrAnsImg = $("<img>");
-		corrAnsImg.html(questionArray[questIndex].correctImg);
-		displayAnswerBoard(answerStatus);
+		$("#resultMessage").text(remarkArray[triviaGame.answerStatus]);
+		$("#corrAnsDisplay").text("The correct answer is: " + questionArray[triviaGame.questIndex].correctAnswer);
+		$("#corrAnsImg").attr("src", questionArray[triviaGame.questIndex].correctImg);
+		$("#corrAnsImg").attr("alt", questionArray[triviaGame.questIndex].correctImgDescrip);
+		console.log(questionArray[triviaGame.questIndex].correctImg);
+		triviaGame.displayAnsScreen();
 	},
 
 	
 
-	//setTimeout(autoNewPage, 3000);		
+	//		
 	
 
 	//helper function for automatically shifting to another page
 	autoNewPage: function(answersGivenCounter, questIndex){
-		if(answersGivenCounter === 5){
-			assembleWrapUpBoard();
-		} else if(answersGivenCounter < 5){
-			assembleQandABoard(questionArray[questIndex + 1]);
+
+		if(triviaGame.answersGivenCounter === 5){
+			triviaGame.assembleWrapUpBoard();
+		} else if(triviaGame.answersGivenCounter < 5){
+			triviaGame.questIndex++;
+			triviaGame.assembleQandA_Board(questionArray[triviaGame.questIndex]);
+			console.log(questionArray[triviaGame.questIndex]);
 		}
 	},				
 
@@ -210,11 +218,11 @@ var triviaGame = {
 		var gameOverPara = $("<p>");
 		gameOverPara.text("Game's over.  Here's how you did.");
 		var winsPara = $("<p>");
-		winsPara.text("Wins: " + correctAnswers);
+		winsPara.text("Wins: " + triviaGame.correctAnswers);
 		var lossesPara = $("<p>");
-		lossesPara.text("Losses: " + incorrectAnswers);
+		lossesPara.text("Losses: " + triviaGame.incorrectAnswers);
 		var outOfTimesPara = $("<p>");
-		outOfTimesPara.text("Unanswered: " + outOfTimes);
+		outOfTimesPara.text("Unanswered: " + triviaGame.outOfTimes);
 		var startBtn = $("<button>");
 		startBtn.text("START OVER?");
 
