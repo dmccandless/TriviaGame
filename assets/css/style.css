@@ -80,4 +80,12 @@ footer .container{
 	display: none;
 }
 
+#questionDisplay{
+	color: yellow;
+}
+
+#questionDisplayAns{
+	color: yellow;
+}
+
 
