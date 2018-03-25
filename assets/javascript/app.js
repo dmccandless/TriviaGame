@@ -89,10 +89,7 @@ var triviaGame = {
 
 
 	startBtnPressed: function(){
-		triviaGame.assembleQandA_Board(triviaGame.questIndex);
-		//setTimeout(processSelections, 20000);
-		//triviaGame.displayQuestAnsScreen(triviaGame.questIndex);
-		//triviaGame.questIndex++;
+		triviaGame.assembleQandA_Board();
 	},
 
 	firstPossAnsBtnPressed: function(){
@@ -165,14 +162,15 @@ var triviaGame = {
 
 	displayQuestAnsScreenAgain: function(){
 		$("#viewClosingScreen").css("display", "none");
-		triviaGame.assembleQandA_Board(triviaGame.questIndex);
+		triviaGame.assembleQandA_Board();
 		$("#viewQuestAnsScreen").css("display", "block");
 	},
 
 
-	assembleQandA_Board: function(questIndex){
+	assembleQandA_Board: function(){
 		//$("#viewQuestAnsScreen").empty();
-		$("#timerDisplay").text("Time Remaining: ");
+		stopwatch.start();
+		/*$("#timerDisplay").text("Time Remaining: ");*/
 		$("#questionDisplay").text(questionArray[triviaGame.questIndex].question);
 		console.log(questionArray[triviaGame.questIndex]);
 		$("#answer01Btn").addClass("possAns");
@@ -207,11 +205,11 @@ var triviaGame = {
 			triviaGame.answerStatus = 2;
 			triviaGame.outOfTimes++;
 		}
-		triviaGame.assembleAnswerBoard(triviaGame.answerStatus);
+		triviaGame.assembleAnswerBoard();
 		console.log(triviaGame.answerStatus);
 	},
 
-	assembleAnswerBoard: function(questIndex, answerStatus){
+	assembleAnswerBoard: function(){
 		$("#timerDisplay").text("Time Remaining: ");
 		$("#questionDisplayAns").text(questionArray[triviaGame.questIndex].question);
 		console.log(questionArray[triviaGame.questIndex].question);
@@ -232,13 +230,13 @@ var triviaGame = {
 	
 
 	//helper function for automatically shifting to another page
-	autoNewPage: function(answersGivenCounter, questIndex){
+	autoNewPage: function(){
 		$("#viewAnsScreen").css("display", "none");
 		if(triviaGame.answersGivenCounter === 5){
 			triviaGame.assembleClosingBoard();
 		} else if(triviaGame.answersGivenCounter < 5){
 			triviaGame.questIndex++;
-			triviaGame.assembleQandA_Board(questionArray[triviaGame.questIndex]);
+			triviaGame.assembleQandA_Board();
 			console.log(questionArray[triviaGame.questIndex]);
 		}
 	},				
@@ -254,13 +252,10 @@ var triviaGame = {
 	},
 
 };
-
-$(document).ready(function(){
-
-	triviaGame.initGame();
-
-});
 //end of triviaGame object
+
+
+
 
 //significant input validation issues that are not addressed here:
 //"very friendly user" assumption
@@ -290,67 +285,48 @@ var game = {
 
 
 
-//unclear if I will need the timer control help of something like timeCompute object
-/*
-var timeCompute = {
+var intervalHolder;
 
-// This code will run as soon as the page loads
-window.onload = function() {
-  //$("#lap").on("click", stopwatch.recordLap);
-  $("#stop").on("click", stopwatch.stop);
-  $("#reset").on("click", stopwatch.reset);
-  $("#start").on("click", stopwatch.start);
-};
 
-//  Variable that will hold our setInterval that runs the stopwatch
-var intervalId;
+var clockRunning = false;  //prevents the clock from being sped up unnecessarily
 
-//prevents the clock from being sped up unnecessarily
-var clockRunning = false;
-
-// Our stopwatch object
 var stopwatch = {
 
-  time: 0,
-  //lap: 1,
+  time: 20,
 
   reset: function() {
 
-    stopwatch.time = 0;
-    //stopwatch.lap = 1;
+    stopwatch.time = 20;
 
-    // DONE: Change the "display" div to "00:00."
-    $("#display").text("00:00");
+    $("#timerDisplay").text("Seconds remaining: " + stopwatch.time);
 
   },
+
   start: function() {
 
-    // DONE: Use setInterval to start the count here and set the clock to running.
+  	$("#timerDisplay").text("Seconds remaining: " + stopwatch.time);
+
     if (!clockRunning) {
-        intervalId = setInterval(stopwatch.count, 20000);
+        intervalHolder = setInterval(stopwatch.count, 1000);
         clockRunning = true;
     }
   },
+
   stop: function() {
 
-    // DONE: Use clearInterval to stop the count here and set the clock to not be running.
-    clearInterval(intervalId);
+    clearInterval(intervalHolder);
     clockRunning = false;
   },
 
   count: function() {
 
-    // DONE: increment time by 1, remember we cant use "this" here.
-    stopwatch.time++;
-
-    // DONE: Get the current time, pass that into the stopwatch.timeConverter function,
-    //       and save the result in a variable.
+    stopwatch.time--;
     var converted = stopwatch.timeConverter(stopwatch.time);
-    console.log(converted);
 
-    // DONE: Use the variable we just created to show the converted time in the "display" div.
-    $("#display").text(converted);
+    $("#timerDisplay").text("Seconds remaining: " + converted);
+
   },
+
   timeConverter: function(t) {
 
     var minutes = Math.floor(t / 60);
@@ -369,39 +345,15 @@ var stopwatch = {
 
     return minutes + ":" + seconds;
   }
-}; //end of timeCompute object
-
-*/
-
-//**********************************************************************
-/*
-var letters = [a, b, c];
-
-for(var i = 0; i < letters.length; i++){
-	var letterBtn = $("<button>");
-	letterBtn.addClass("letter-button letter letter-button-color");
-	letterBtn.attr("data-letter", letters[i]);
-	letterBtn.text(letters[i]);
-	$("#buttons").append(letterBtn);
-}
+}; //end of stopwatch object
 
 
-$(".letter-button").click(function(){
-	var fridgeMagnet = $("<div>");
-	fridgeMagnet.addClass("letter fridge-color");
-	fridgeMagnet.text($(this).attr("data-letter"));
-	console.log(fridgeMagnet);
-	$("#display").append(fridgeMagnet);
+
+$(document).ready(function(){
+
+	triviaGame.initGame();
+
 });
 
-$("#clear").click(function(){
-	$("#display").empty();
-});
 
-//***************** some mock-ups
-
-$("#startButton").click(function(){
-	$("#viewScreen").empty();
-});
-*/
 
