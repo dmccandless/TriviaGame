@@ -66,7 +66,7 @@ var questionArray = [
 
 
 var remarkArray = ["Yep, you got it right!", "Nope! But here's the correct answer....",
-					 "Time's up for this question, let's move to the next one."];
+					 "Time's up for this question, let's move on to the next one."];
 
 //use triviaGame prefix on calls when necessary
 //remember to use val() when necessary
@@ -86,13 +86,17 @@ var triviaGame = {
 	questIndex: 0,
 	answersGivenCounter: 0,
 	answerStatus: 0,
+	pageTime: 0,
 
 
 	startBtnPressed: function(){
 		triviaGame.assembleQandA_Board();
+		triviaGame.pageTime = setTimeout(triviaGame.outOfTimeProcessing, 20000);
 	},
 
 	firstPossAnsBtnPressed: function(){
+		stopwatch.stop();
+		clearTimeout(triviaGame.pageTime);
 		btnAnsInput = $("#answer01Btn").attr("data-possAns");
 		console.log($("#answer01Btn").attr("data-possAns"));
 		console.log(btnAnsInput);
@@ -101,18 +105,24 @@ var triviaGame = {
 	},
 
 	secondPossAnsBtnPressed: function(){
+		stopwatch.stop();
+		clearTimeout(triviaGame.pageTime);
 		btnAnsInput = $("#answer02Btn").attr("data-possAns");
 		//ansGiven = true;
 		triviaGame.processSelections(questionArray[1], btnAnsInput);
 	},
 
 	thirdPossAnsBtnPressed: function(){
+		stopwatch.stop();
+		clearTimeout(triviaGame.pageTime);
 		btnAnsInput = $("#answer03Btn").attr("data-possAns");
 		//ansGiven = true;
 		triviaGame.processSelections(questionArray[2], btnAnsInput);
 	},
 
 	fourthPossAnsBtnPressed: function(){
+		stopwatch.stop();
+		clearTimeout(triviaGame.pageTime);
 		btnAnsInput = $("#answer04Btn").attr("data-possAns");
 		//ansGiven = true;
 		triviaGame.processSelections(questionArray[3], btnAnsInput);
@@ -120,6 +130,7 @@ var triviaGame = {
 
 	reStartBtnPressed: function(){
 		//triviaGame.pageTimer = 20000;
+		stopwatch.reset();
 		triviaGame.correctAnswers = 0;
 		console.log(triviaGame.correctAnswers);
 		triviaGame.incorrectAnswers = 0;
@@ -136,17 +147,13 @@ var triviaGame = {
 		triviaGame.displayHelloScreen();
 	},
 
-	/*resetPageTimer: function(){
-		pageTimer: 20000
-	},*/
-
 	displayHelloScreen: function(){
 		$("#viewHelloScreen").css("display", "block");
 	},
 
 	displayQuestAnsScreen: function(){
 		$("#viewHelloScreen").css("display", "none");
-		$("#viewQuestAnsScreen").css("display", "block");
+		$("#viewQuestAnsScreen").css("display", "block");	
 	},
 
 	displayAnsScreen: function(){
@@ -168,8 +175,8 @@ var triviaGame = {
 
 
 	assembleQandA_Board: function(){
-		//$("#viewQuestAnsScreen").empty();
 		stopwatch.start();
+		
 		/*$("#timerDisplay").text("Time Remaining: ");*/
 		$("#questionDisplay").text(questionArray[triviaGame.questIndex].question);
 		console.log(questionArray[triviaGame.questIndex]);
@@ -185,7 +192,7 @@ var triviaGame = {
 		$("#answer04Btn").addClass("possAns");
 		$("#answer04Btn").attr("data-possAns", questionArray[triviaGame.questIndex].answers[3]);
 		$("#answer04Btn").text(questionArray[triviaGame.questIndex].answers[3]);
-
+		//triviaGame.pageTime = setTimeout(triviaGame.outOfTimeProcessing, 20000);
 		triviaGame.displayQuestAnsScreen();
 	},
 
@@ -209,8 +216,28 @@ var triviaGame = {
 		console.log(triviaGame.answerStatus);
 	},
 
+	outOfTimeProcessing: function(){/*
+		stopwatch.stop();
+		clearTimeout(triviaGame.pageTime);
+		triviaGame.questIndex++;
+		triviaGame.answerStatus = 2;
+		triviaGame.outOfTimes++;
+		btnAnsInput = "Nobody";
+		$("#timerDisplay").text("Seconds remaining: " + stopwatch.time);
+		$("#questionDisplayAns").text(questionArray[triviaGame.questIndex].question);
+		$("#playerGuess").text("You guessed: " + btnAnsInput);
+		$("#resultMessage").text(remarkArray[triviaGame.answerStatus]);
+		console.log(remarkArray[triviaGame.answerStatus]);
+		$("#corrAnsDisplay").text("The correct answer is: " + questionArray[triviaGame.questIndex].correctAnswer);
+		$("#corrAnsImg").attr("src", questionArray[triviaGame.questIndex].correctImg);
+		$("#corrAnsImg").attr("alt", questionArray[triviaGame.questIndex].correctImgDescrip);
+		console.log(questionArray[triviaGame.questIndex].correctImg);
+		stopwatch.reset();
+		triviaGame.displayAnsScreen();*/
+	},
+
 	assembleAnswerBoard: function(){
-		$("#timerDisplay").text("Time Remaining: ");
+		$("#timerDisplay").text("Seconds remaining: " + stopwatch.time);
 		$("#questionDisplayAns").text(questionArray[triviaGame.questIndex].question);
 		console.log(questionArray[triviaGame.questIndex].question);
 		$("#playerGuess").text("You guessed: " + btnAnsInput);
@@ -236,13 +263,14 @@ var triviaGame = {
 			triviaGame.assembleClosingBoard();
 		} else if(triviaGame.answersGivenCounter < 5){
 			triviaGame.questIndex++;
+			stopwatch.reset();
 			triviaGame.assembleQandA_Board();
 			console.log(questionArray[triviaGame.questIndex]);
 		}
 	},				
 
 	assembleClosingBoard: function(){
-		$("#timerDisplay").text("Time Remaining: ");
+		$("#timerDisplay").text("Seconds remaining: " + stopwatch.time);
 		$("#playerPerfMessage").text("Game's over.  Here's how you did.");
 		$("#totalCorrectDisplay").text("Correct Answers: " + triviaGame.correctAnswers);
 		$("#totalIncorrectDisplay").text("Incorrect Answers: " + triviaGame.incorrectAnswers);
@@ -324,6 +352,9 @@ var stopwatch = {
     var converted = stopwatch.timeConverter(stopwatch.time);
 
     $("#timerDisplay").text("Seconds remaining: " + converted);
+    if(stopwatch.time === 0){
+    	stopwatch.stop();
+    }
 
   },
 
